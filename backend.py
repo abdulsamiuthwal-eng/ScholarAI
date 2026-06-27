@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Optional, List
 from datetime import datetime, timedelta
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Request
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Request, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -344,9 +344,15 @@ def root():
 
 # ── Auth Routes ───────────────────────────────────────────────────────────
 
+def _get_client_ip(x_forwarded_for: str) -> str:
+    if x_forwarded_for:
+        return x_forwarded_for.split(",")[0].strip()
+    return "unknown"
+
+
 @app.post("/api/auth/register")
-def register(request: Request, data: AuthRegister):
-    ip = request.client.host if request.client else "unknown"
+def register(data: AuthRegister, x_forwarded_for: str = Header(None)):
+    ip = _get_client_ip(x_forwarded_for)
     if rate_limit(ip, max_req=3, window=60):
         raise HTTPException(status_code=429, detail="Too many registration attempts. Try again later.")
     users = load_users()
@@ -368,8 +374,8 @@ def register(request: Request, data: AuthRegister):
 
 
 @app.post("/api/auth/login")
-def login(request: Request, data: AuthLogin):
-    ip = request.client.host if request.client else "unknown"
+def login(data: AuthLogin, x_forwarded_for: str = Header(None)):
+    ip = _get_client_ip(x_forwarded_for)
     if rate_limit(ip, max_req=5, window=60):
         raise HTTPException(status_code=429, detail="Too many login attempts. Try again later.")
     users = load_users()
