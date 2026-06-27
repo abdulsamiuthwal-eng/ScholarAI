@@ -3,12 +3,12 @@ Aether Research – RAG Research Assistant Backend
 FastAPI + LangChain LCEL + ChromaDB + Groq
 """
 
-import os, json, uuid, shutil
+import os, json, uuid, shutil, time, hashlib, base64, secrets
 from pathlib import Path
 from typing import Optional, List
 from datetime import datetime, timedelta
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -21,6 +21,7 @@ load_dotenv()
 # ── Auth imports ───────────────────────────────────────────────────────────
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from cryptography.fernet import Fernet
 
 # ── LangChain LCEL imports ────────────────────────────────────────────────────
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -37,7 +38,7 @@ app = FastAPI(title="ScholarAI API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -60,13 +61,33 @@ _vectorstore: Optional[Chroma] = None
 _chat_history: dict = {}     # session_id → list[HumanMessage | AIMessage]
 _chat_log: dict = {}         # session_id → list[{role, content, ts, sources}]
 
-# ── Auth config ────────────────────────────────────────────────────────────
-SECRET_KEY = os.getenv("AETHER_SECRET", "aether-sahara-secret-key-change-in-prod")
+# ── Security config ───────────────────────────────────────────────────────
+SECRET_KEY = os.getenv("AETHER_SECRET", "")
+if not SECRET_KEY:
+    SECRET_KEY = secrets.token_hex(32)
+    print("⚠️  AETHER_SECRET not set. Using auto-generated key (will change on restart).")
+
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 30
+ACCESS_TOKEN_EXPIRE_DAYS = 7
+
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 USERS_FILE = Path("users.json")
+
+# ── Rate limiter (in-memory) ──────────────────────────────────────────────
+_RATE_LIMIT: dict = {}  # ip → [timestamps]
+
+def rate_limit(ip: str, max_req: int = 5, window: int = 60):
+    now = time.time()
+    timestamps = _RATE_LIMIT.get(ip, [])
+    timestamps = [t for t in timestamps if now - t < window]
+    _RATE_LIMIT[ip] = timestamps
+    if len(timestamps) >= max_req:
+        return True
+    timestamps.append(now)
+    return False
 
 def load_users() -> dict:
     if USERS_FILE.exists():
@@ -123,6 +144,29 @@ def get_vectorstore() -> Chroma:
     return _vectorstore
 
 
+# ── Encrypted settings helpers ────────────────────────────────────────────
+_SENSITIVE_KEYS = {"groq_api_key", "openai_api_key", "anthropic_api_key"}
+
+def _fernet_key() -> bytes:
+    raw = hashlib.sha256(SECRET_KEY.encode()).digest()
+    return base64.urlsafe_b64encode(raw)
+
+def _encrypt(val: str) -> str:
+    if not val:
+        return ""
+    f = Fernet(_fernet_key())
+    return f.encrypt(val.encode()).decode()
+
+def _decrypt(val: str) -> str:
+    if not val:
+        return ""
+    try:
+        f = Fernet(_fernet_key())
+        return f.decrypt(val.encode()).decode()
+    except Exception:
+        return None  # signal: not encrypted, needs migration
+
+
 def load_settings() -> dict:
     defaults = {
         "model": "llama-3.3-70b-versatile",
@@ -145,6 +189,21 @@ def load_settings() -> dict:
         try:
             data = json.loads(SETTINGS_FILE.read_text())
             
+            # Decrypt sensitive fields & migrate any plaintext
+            migrated = False
+            for k in _SENSITIVE_KEYS:
+                if k in data and data[k]:
+                    decrypted = _decrypt(data[k])
+                    if decrypted is None:
+                        data[k] = data[k]
+                        migrated = True
+                    else:
+                        data[k] = decrypted
+                else:
+                    data[k] = defaults.get(k, "")
+            if migrated:
+                save_settings(data)
+
             # Auto-migrate decommissioned Groq models
             model_migrations = {
                 "mixtral-8x7b-32768": "llama-3.3-70b-versatile",
@@ -153,7 +212,7 @@ def load_settings() -> dict:
             }
             if data.get("model") in model_migrations:
                 data["model"] = model_migrations[data["model"]]
-                SETTINGS_FILE.write_text(json.dumps(data, indent=2))
+                save_settings(data)
 
             for k, v in defaults.items():
                 if k not in data:
@@ -165,7 +224,12 @@ def load_settings() -> dict:
 
 
 def save_settings(data: dict):
-    SETTINGS_FILE.write_text(json.dumps(data, indent=2))
+    # Encrypt sensitive fields before saving
+    out = dict(data)
+    for k in _SENSITIVE_KEYS:
+        if k in out and out[k]:
+            out[k] = _encrypt(out[k])
+    SETTINGS_FILE.write_text(json.dumps(out, indent=2))
 
 
 def load_memory() -> list:
@@ -267,7 +331,10 @@ def root():
 # ── Auth Routes ───────────────────────────────────────────────────────────
 
 @app.post("/api/auth/register")
-def register(data: AuthRegister):
+def register(request: Request, data: AuthRegister):
+    ip = request.client.host if request.client else "unknown"
+    if rate_limit(ip, max_req=3, window=60):
+        raise HTTPException(status_code=429, detail="Too many registration attempts. Try again later.")
     users = load_users()
     if data.email in users:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -287,7 +354,10 @@ def register(data: AuthRegister):
 
 
 @app.post("/api/auth/login")
-def login(data: AuthLogin):
+def login(request: Request, data: AuthLogin):
+    ip = request.client.host if request.client else "unknown"
+    if rate_limit(ip, max_req=5, window=60):
+        raise HTTPException(status_code=429, detail="Too many login attempts. Try again later.")
     users = load_users()
     user = users.get(data.email)
     if not user or not pwd_context.verify(data.password, user["password"]):
