@@ -651,6 +651,28 @@ def list_models():
     return {"models": MODELS}
 
 
+@app.post("/api/debug/login")
+def debug_login(data: AuthLogin):
+    return {"email": data.email, "password_len": len(data.password)}
+
+@app.post("/api/debug/login2")
+def debug_login2(data: AuthLogin, x_forwarded_for: str = Header(None)):
+    return {"email": data.email, "password_len": len(data.password), "ip": x_forwarded_for}
+
+@app.post("/api/debug/bcrypt")
+def debug_bcrypt():
+    users = load_users()
+    demo = users.get("demo@scholarai.local", None)
+    if demo:
+        try:
+            result = pwd_context.verify("demo123456", demo["password"])
+            token = create_access_token({"sub": "demo@scholarai.local"})
+            return {"verified": result, "token": token, "user_exists": True}
+        except Exception as e:
+            return {"error": str(e), "user_exists": True}
+    return {"user_exists": False, "users": list(users.keys())}
+
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8001"))
