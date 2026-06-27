@@ -664,7 +664,7 @@ def debug_bcrypt():
     demo = users.get("demo@scholarai.local", None)
     if demo:
         try:
-            result = pwd_context.verify("demo123456", demo["password"])
+            result = bcrypt.checkpw(b"demo123456", demo["password"].encode("utf-8"))
             token = create_access_token({"sub": "demo@scholarai.local"})
             return {"verified": result, "token": token, "user_exists": True}
         except Exception as e:
