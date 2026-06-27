@@ -1,3 +1,12 @@
+---
+title: ScholarAI
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
+
 # ScholarAI — RAG Research Assistant
 
 An intelligent research assistant powered by **Retrieval-Augmented Generation (RAG)**. Upload documents (PDF, TXT, MD), ask questions, and get answers grounded in your own knowledge base with source citations.
