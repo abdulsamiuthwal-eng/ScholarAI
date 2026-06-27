@@ -1,6 +1,6 @@
 chroma_db/
 uploads/
-users.json
+# users.json is needed for HF Spaces deployment
 settings.json
 memory.json
 .env

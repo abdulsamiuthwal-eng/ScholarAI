@@ -77,6 +77,19 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 USERS_FILE = Path("users.json")
 
+# Create default demo user if users.json doesn't exist
+_DEMO_PASSWORD_HASH = "$2b$12$d.AinDA2Q1XT98pC1XHVBecxF6VdZCVNHTd2iQq0Q33IfEWJycbga"
+if not USERS_FILE.exists():
+    save_users({
+        "demo@scholarai.local": {
+            "id": str(uuid.uuid4()),
+            "email": "demo@scholarai.local",
+            "name": "Demo User",
+            "password": _DEMO_PASSWORD_HASH,
+            "created": datetime.now().isoformat(),
+        }
+    })
+
 # ── Rate limiter (in-memory) ──────────────────────────────────────────────
 _RATE_LIMIT: dict = {}  # ip → [timestamps]
 
