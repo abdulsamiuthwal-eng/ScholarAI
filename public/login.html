@@ -89,6 +89,22 @@
 
   @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
 
+  /* ── Connecting overlay ─────────────────────────────── */
+  #connecting {
+    position: fixed; inset: 0; z-index: 5000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #faf5ee; opacity: 0; transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+  #connecting.show { opacity: 1; pointer-events: auto; }
+  #connecting .spin { width: 32px; height: 32px; border: 3px solid #d8d0c8; border-top-color: #c2652a; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
+  #connecting p { font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: #605850; font-weight: 600; }
+  #connecting .dot { display: inline-block; animation: dotPulse 1.4s infinite; }
+  #connecting .dot:nth-child(2) { animation-delay: 0.2s; }
+  #connecting .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse { 0%,80%,100% { opacity: 0.2; } 40% { opacity: 1; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   /* ── Auth Page ──────────────────────────────────────── */
   #auth-page {
     position: fixed; inset: 0; display: flex;
@@ -266,6 +282,12 @@ setTimeout(function(){
 }, 6000);
 </script>
 
+<!-- ═══════════ CONNECTING OVERLAY ═══════════ -->
+<div id="connecting">
+  <div class="spin"></div>
+  <p>Waking up server<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+</div>
+
 <!-- ═══════════ AUTH PAGE ═══════════ -->
 <div id="auth-page">
   <div class="auth-bg">
@@ -346,20 +368,30 @@ setTimeout(function(){
 <script>
 const API = window.location.origin;
 
-// ── Wake up server on page load ────────────────────
-fetch(`${API}/api/status`).catch(() => {});
-
 // ── Retry helper (HF Spaces sleep fix) ─────────────
-async function apiFetch(url, opts, retries = 3) {
+async function apiFetch(url, opts, retries = 5) {
   for (let i = 0; i < retries; i++) {
     try {
       const r = await fetch(url, opts);
       return r;
     } catch (e) {
       if (i === retries - 1) throw e;
-      await new Promise(r => setTimeout(r, 2000 * (i + 1)));
+      await new Promise(r => setTimeout(r, [3000, 5000, 8000, 12000][i] || 15000));
     }
   }
+}
+
+// ── Wake up server before showing login ────────────
+async function waitForServer() {
+  const el = document.getElementById('connecting');
+  for (let i = 0; i < 20; i++) {
+    try {
+      const r = await fetch(`${API}/api/status`);
+      if (r.ok) { el.classList.remove('show'); document.getElementById('auth-page').classList.add('show'); return; }
+    } catch(e) {}
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  el.innerHTML = '<p style="color:#c0392b;font-size:0.85rem;font-weight:600;">Server not responding. Please refresh the page.</p>';
 }
 
 // ── Splash Screen ──────────────────────────────────
@@ -377,8 +409,9 @@ function dismissSplash() {
   var s = document.getElementById('splash');
   if (!s) return;
   s.classList.add('hide');
-  document.getElementById('auth-page').classList.add('show');
+  document.getElementById('connecting').classList.add('show');
   setTimeout(function(){ s.classList.add('hidden'); }, 800);
+  waitForServer();
 }
 
 setTimeout(dismissSplash, 2800);
