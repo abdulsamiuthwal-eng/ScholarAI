@@ -20,7 +20,7 @@ load_dotenv()
 
 # ── Auth imports ───────────────────────────────────────────────────────────
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt
 from cryptography.fernet import Fernet
 
 # ── LangChain LCEL imports ────────────────────────────────────────────────────
@@ -73,19 +73,18 @@ if not SECRET_KEY:
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 USERS_FILE = Path("users.json")
 
 # Create default demo user if users.json doesn't exist
-_DEMO_PASSWORD_HASH = "$2b$12$d.AinDA2Q1XT98pC1XHVBecxF6VdZCVNHTd2iQq0Q33IfEWJycbga"
 if not USERS_FILE.exists():
+    _demo_hash = bcrypt.hashpw(b"demo123456", bcrypt.gensalt()).decode("utf-8")
     save_users({
         "demo@scholarai.local": {
             "id": str(uuid.uuid4()),
             "email": "demo@scholarai.local",
             "name": "Demo User",
-            "password": _DEMO_PASSWORD_HASH,
+            "password": _demo_hash,
             "created": datetime.now().isoformat(),
         }
     })
@@ -365,7 +364,7 @@ def register(data: AuthRegister, x_forwarded_for: str = Header(None)):
         "id": user_id,
         "email": data.email,
         "name": data.name,
-        "password": pwd_context.hash(data.password),
+        "password": bcrypt.hashpw(data.password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8"),
         "created": datetime.now().isoformat(),
     }
     save_users(users)
@@ -380,7 +379,7 @@ def login(data: AuthLogin, x_forwarded_for: str = Header(None)):
         raise HTTPException(status_code=429, detail="Too many login attempts. Try again later.")
     users = load_users()
     user = users.get(data.email)
-    if not user or not pwd_context.verify(data.password, user["password"]):
+    if not user or not bcrypt.checkpw(data.password.encode("utf-8"), user["password"].encode("utf-8")):
         raise HTTPException(status_code=401, detail="Invalid email or password")
     token = create_access_token({"sub": data.email})
     return {"token": token, "user": {"id": user["id"], "email": data.email, "name": user["name"]}}
