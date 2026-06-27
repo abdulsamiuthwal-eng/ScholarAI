@@ -1,0 +1,16 @@
+chroma_db/
+uploads/
+users.json
+settings.json
+memory.json
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.log
+start.bat

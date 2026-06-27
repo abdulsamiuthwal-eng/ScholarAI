@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Long-term Memory | Aether Research</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Eb+Garamond:wght@400;500;600;700;800&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#c2652a",
+                    "surface-variant": "#ece6dc",
+                    "error-container": "#fce4e0",
+                    "primary-container": "#e08850",
+                    "surface": "#faf5ee",
+                    "outline-variant": "#d8d0c8",
+                    "outline": "#9a9088",
+                    "tertiary-fixed": "#fce0e0",
+                    "on-tertiary-container": "#3a2020",
+                    "surface-container-highest": "#e6e0d6",
+                    "inverse-primary": "#f0a878",
+                    "surface-container-high": "#ece6dc",
+                    "secondary-fixed": "#eae2da",
+                    "surface-tint": "#c2652a",
+                    "secondary-fixed-dim": "#cec6be",
+                    "primary-fixed-dim": "#f0a878",
+                    "surface-bright": "#faf5ee",
+                    "primary-fixed": "#fbe8d8",
+                    "error": "#c0392b",
+                    "on-error-container": "#7a1a10",
+                    "surface-dim": "#dcd6cc",
+                    "tertiary-fixed-dim": "#e8a0a0",
+                    "on-secondary-container": "#605850",
+                    "inverse-on-surface": "#faf5ee",
+                    "surface-container": "#f2ece4",
+                    "on-primary": "#ffffff",
+                    "on-background": "#3a302a",
+                    "on-secondary-fixed-variant": "#504840",
+                    "on-surface": "#3a302a",
+                    "on-primary-fixed": "#401a08",
+                    "on-surface-variant": "#605850",
+                    "background": "#faf5ee",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-container": "#eae2da",
+                    "on-secondary-fixed": "#2a2420",
+                    "tertiary": "#8c3c3c",
+                    "secondary": "#78706a",
+                    "on-tertiary-fixed-variant": "#6e3030",
+                    "inverse-surface": "#3a302a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f6f0e8",
+                    "on-tertiary-fixed": "#2e1515",
+                    "tertiary-container": "#d47070",
+                    "on-primary-fixed-variant": "#8a4518",
+                    "on-primary-container": "#fbe8d8"
+            },
+            "fontFamily": {
+                    "headline": ["Eb Garamond"],
+                    "display": ["Eb Garamond"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .font-headline { font-family: 'Eb Garamond', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .perspective-1000 { perspective: 1000px; }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d8d0c8; border-radius: 10px; }
+        
+        .floating-entity {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden">
+<!-- SIDE NAV BAR -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant/60 flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline text-2xl font-bold text-primary tracking-tight">Aether Research</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-semibold mt-1">Sahara Edition</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Workspace -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">clinical_notes</span>
+<span class="font-body text-sm">Workspace</span>
+</a>
+<!-- API Configuration -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-body text-sm">API Configuration</span>
+</a>
+<!-- Model Selection -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">model_training</span>
+<span class="font-body text-sm">Model Selection</span>
+</a>
+<!-- Knowledge Base -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body text-sm">Knowledge Base</span>
+</a>
+<!-- Long-term Memory (ACTIVE) -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary transition-all duration-200 ease-in-out bg-surface-variant/20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-body text-sm">Long-term Memory</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-xs uppercase tracking-wider">New Analysis</span>
+</button>
+</div>
+</aside>
+<!-- TOP APP BAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface/80 backdrop-blur-md shadow-sm flex justify-between items-center px-8 py-4">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md focus-within:ring-1 focus-within:ring-primary/20 rounded-lg">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">search</span>
+<input class="w-full bg-surface-container border-none rounded-lg pl-10 py-2 text-sm focus:ring-0 placeholder:text-on-surface-variant/50" placeholder="Search memory nodes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT -->
+<main class="ml-64 pt-20 h-screen overflow-y-auto px-8 pb-12">
+<!-- Hero Section -->
+<div class="max-w-7xl mx-auto py-10 border-b border-outline-variant/30 mb-10">
+<h2 class="font-headline text-5xl font-medium text-on-surface mb-2">Long-term Memory</h2>
+<p class="font-body text-secondary text-lg italic opacity-80">Persistent context for continuous discovery</p>
+</div>
+<div class="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+<!-- Left Column: Memory Visualization (Bento Area) -->
+<div class="col-span-8 space-y-8">
+<!-- Memory Bank Visualization -->
+<section class="bg-surface-container-low rounded-xl p-8 relative overflow-hidden h-[450px]">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'FILL' 1;">neurology</span>
+</div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-12">
+<div>
+<h3 class="font-headline text-2xl text-on-surface">Memory Bank</h3>
+<p class="text-sm text-on-surface-variant">Active neural nodes and inferred relationships</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full text-xs font-semibold hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span> Export Context
+                                </button>
+<button class="px-4 py-2 bg-error text-on-primary rounded-full text-xs font-semibold hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">delete_sweep</span> Flush Memory
+                                </button>
+</div>
+</div>
+<!-- Visualization Nodes -->
+<div class="flex-1 relative flex items-center justify-center">
+<div class="grid grid-cols-3 gap-6 w-full h-full p-4">
+<!-- Node 1 -->
+<div class="floating-entity bg-white shadow-sm border border-outline-variant/40 p-4 rounded-lg flex flex-col gap-2 self-start transform -rotate-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary">Concept</span>
+</div>
+<p class="text-sm font-semibold">Quantum Resonance Paradox</p>
+<p class="text-xs text-on-surface-variant line-clamp-2">Identified during the discussion on Saharan atmosphere and ionic decay.</p>
+</div>
+<!-- Node 2 -->
+<div class="floating-entity bg-white shadow-sm border border-outline-variant/40 p-4 rounded-lg flex flex-col gap-2 self-center transform rotate-2" style="animation-delay: -1.5s;">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-tertiary">Entity</span>
+</div>
+<p class="text-sm font-semibold">Project: Helios 7</p>
+<p class="text-xs text-on-surface-variant line-clamp-2">A high-altitude solar gathering initiative referenced twice this week.</p>
+</div>
+<!-- Node 3 -->
+<div class="floating-entity bg-white shadow-sm border border-outline-variant/40 p-4 rounded-lg flex flex-col gap-2 self-end transform -rotate-2" style="animation-delay: -3s;">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-secondary-fixed-variant"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed-variant">Stat</span>
+</div>
+<p class="text-sm font-semibold">CO2 Absorption Rate</p>
+<p class="text-xs text-on-surface-variant line-clamp-2">4.2% higher efficiency in low-density warm zones (Saharan specific).</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Memory Usage Stats Grid -->
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-surface-container rounded-xl p-6 flex flex-col gap-1 border border-outline-variant/20 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+<span class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Total Indexed Facts</span>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="text-4xl font-headline text-primary">12,482</span>
+<span class="text-xs text-on-surface-variant">+12% vs last month</span>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 flex flex-col gap-1 border border-outline-variant/20 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+<span class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Memory Saturation</span>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="text-4xl font-headline text-on-surface">34%</span>
+<div class="flex-1 bg-outline-variant/30 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[34%]"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-6 flex flex-col gap-1 border border-outline-variant/20 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+<span class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Active Entities</span>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="text-4xl font-headline text-on-surface">156</span>
+<span class="text-xs text-on-surface-variant">Linked clusters</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar Panels -->
+<div class="col-span-4 space-y-8">
+<!-- Pinned Contexts -->
+<section class="bg-surface-container-high rounded-xl p-6 border border-outline-variant/40">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-headline text-xl text-on-surface">Pinned Contexts</h4>
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-4 leading-relaxed">These contexts are always loaded into the model's primary attention span regardless of the conversation topic.</p>
+<div class="space-y-4">
+<!-- Pinned Item 1 -->
+<div class="bg-surface p-4 rounded-lg border border-outline-variant/30 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">description</span>
+<div class="flex-1">
+<p class="text-sm font-semibold">User Ethics Protocol v2</p>
+<p class="text-[11px] text-on-surface-variant mt-1">Enforced across all model outputs for bias mitigation.</p>
+</div>
+<button class="text-on-surface-variant hover:text-tertiary">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<!-- Pinned Item 2 -->
+<div class="bg-surface p-4 rounded-lg border border-outline-variant/30 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">analytics</span>
+<div class="flex-1">
+<p class="text-sm font-semibold">Sahara Data Streams</p>
+<p class="text-[11px] text-on-surface-variant mt-1">Real-time telemetry from North African sensor arrays.</p>
+</div>
+<button class="text-on-surface-variant hover:text-tertiary">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<button class="w-full py-3 border border-dashed border-outline text-on-surface-variant rounded-lg text-xs font-semibold hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2 mt-4">
+<span class="material-symbols-outlined text-sm">add</span> Pin New Context
+                        </button>
+</div>
+</section>
+<!-- Data Privacy Card -->
+<section class="relative rounded-xl overflow-hidden aspect-[4/3]">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A warm, sun-drenched minimalist workspace in a high-end desert lodge with sand dunes visible through massive glass windows. The room is designed with soft linen textures, burnt sienna accents, and warm wooden furniture, creating a luxurious and serene atmosphere that aligns with the Sahara Edition theme. Soft golden hour lighting fills the space." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEMb5WopMCcCZjDb3hZzBL8aW0l5egPcgc5QZDW8AOlNhX_b1YVOd6jqiNTjct-V2Q84v-MoONPDFwh_ecz_7Bnnu1kSSpuG4iFqH1-DCV71wZfl8vfJ9KTCeOpPKMWL1N3injX6GVkx_uR9Ff_iVB_-luUt1ICoP_QgGZ_-lmxwvJ-8mk3lN9aYZWvw0wOxpltTTyS2vbSkFmfpS45SNBIVNlldtC0qVvD4UP4c_JpRExcLyp_dJvNuUunL-XUCwImd8dw-gbsnQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 to-transparent p-6 flex flex-col justify-end">
+<h5 class="text-surface font-headline text-2xl">Privacy First</h5>
+<p class="text-surface/80 text-xs mt-2 leading-relaxed">Your long-term memory is locally encrypted. We use zero-knowledge proofs to ensure your research stays yours.</p>
+<a class="text-primary-container text-xs font-bold mt-4 uppercase tracking-widest hover:underline" href="#">Review Security Policy</a>
+</div>
+</section>
+</div>
+</div>
+<!-- Recent Activity Feed (Horizontal) -->
+<div class="max-w-7xl mx-auto mt-16 mb-20">
+<h3 class="font-headline text-2xl mb-8">Recent Context Acquisition</h3>
+<div class="flex gap-6 overflow-x-auto pb-6">
+<!-- Activity 1 -->
+<div class="min-w-[320px] bg-white p-6 rounded-xl border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant px-2 py-0.5 bg-surface-container rounded-full">2 HOURS AGO</span>
+</div>
+<p class="font-semibold text-sm leading-tight">Learned: Specific heat capacity of Sahara-native sand quartz varieties.</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Derived from analysis session "Geothermal potential in arid climates".</p>
+<button class="text-primary text-[11px] font-bold mt-2 uppercase tracking-wider text-left">View Linked Nodes</button>
+</div>
+<!-- Activity 2 -->
+<div class="min-w-[320px] bg-white p-6 rounded-xl border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant px-2 py-0.5 bg-surface-container rounded-full">6 HOURS AGO</span>
+</div>
+<p class="font-semibold text-sm leading-tight">Updated: Corporate hierarchy for Neo-Energy Global.</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Updated existing node with 3 new board member identities.</p>
+<button class="text-primary text-[11px] font-bold mt-2 uppercase tracking-wider text-left">View Linked Nodes</button>
+</div>
+<!-- Activity 3 -->
+<div class="min-w-[320px] bg-white p-6 rounded-xl border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant px-2 py-0.5 bg-surface-container rounded-full">YESTERDAY</span>
+</div>
+<p class="font-semibold text-sm leading-tight">Indexed: Patent #US2024091A for Atmospheric Water Harvesters.</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Automated ingestion from Workspace document upload.</p>
+<button class="text-primary text-[11px] font-bold mt-2 uppercase tracking-wider text-left">View Linked Nodes</button>
+</div>
+<!-- Activity 4 -->
+<div class="min-w-[320px] bg-white p-6 rounded-xl border border-outline-variant/30 flex flex-col gap-3 opacity-50">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant px-2 py-0.5 bg-surface-container rounded-full">YESTERDAY</span>
+</div>
+<p class="font-semibold text-sm leading-tight">Summarized: Historical Rainfall Data (1990-2023).</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Archived to low-latency memory cluster.</p>
+<button class="text-primary text-[11px] font-bold mt-2 uppercase tracking-wider text-left">View Linked Nodes</button>
+</div>
+</div>
+</div>
+</main>
+<!-- INTERACTIVE BACKGROUND ACCENT -->
+<div class="fixed inset-0 pointer-events-none -z-10 opacity-30">
+<div class="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[10%] w-[500px] h-[500px] bg-tertiary/5 rounded-full blur-[100px]"></div>
+</div>
+<script>
+        // Micro-interactions for hovering nodes
+        document.querySelectorAll('.floating-entity').forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                node.style.animationPlayState = 'paused';
+                node.style.borderColor = '#c2652a';
+                node.style.transition = 'all 0.3s ease';
+            });
+            node.addEventListener('mouseleave', () => {
+                node.style.animationPlayState = 'running';
+                node.style.borderColor = 'rgba(216, 208, 200, 0.4)';
+            });
+        });
+
+        // Toggle flush memory (simulation)
+        const flushBtn = document.querySelector('button:contains("Flush Memory")');
+        if (flushBtn) {
+            flushBtn.onclick = () => {
+                if(confirm("Are you sure you want to permanently clear the memory bank? This action cannot be undone.")) {
+                    alert("Memory purged successfully.");
+                }
+            }
+        }
+    </script>
+</body></html>

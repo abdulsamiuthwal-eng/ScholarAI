@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Selection | Aether Research</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Eb+Garamond:wght@400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#c2652a",
+                        "surface-variant": "#ece6dc",
+                        "error-container": "#fce4e0",
+                        "primary-container": "#e08850",
+                        "surface": "#faf5ee",
+                        "outline-variant": "#d8d0c8",
+                        "outline": "#9a9088",
+                        "tertiary-fixed": "#fce0e0",
+                        "on-tertiary-container": "#3a2020",
+                        "surface-container-highest": "#e6e0d6",
+                        "inverse-primary": "#f0a878",
+                        "surface-container-high": "#ece6dc",
+                        "secondary-fixed": "#eae2da",
+                        "surface-tint": "#c2652a",
+                        "secondary-fixed-dim": "#cec6be",
+                        "primary-fixed-dim": "#f0a878",
+                        "surface-bright": "#faf5ee",
+                        "primary-fixed": "#fbe8d8",
+                        "error": "#c0392b",
+                        "on-error-container": "#7a1a10",
+                        "surface-dim": "#dcd6cc",
+                        "tertiary-fixed-dim": "#e8a0a0",
+                        "on-secondary-container": "#605850",
+                        "inverse-on-surface": "#faf5ee",
+                        "surface-container": "#f2ece4",
+                        "on-primary": "#ffffff",
+                        "on-background": "#3a302a",
+                        "on-secondary-fixed-variant": "#504840",
+                        "on-surface": "#3a302a",
+                        "on-primary-fixed": "#401a08",
+                        "on-surface-variant": "#605850",
+                        "background": "#faf5ee",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#eae2da",
+                        "on-secondary-fixed": "#2a2420",
+                        "tertiary": "#8c3c3c",
+                        "secondary": "#78706a",
+                        "on-tertiary-fixed-variant": "#6e3030",
+                        "inverse-surface": "#3a302a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f0e8",
+                        "on-tertiary-fixed": "#2e1515",
+                        "tertiary-container": "#d47070",
+                        "on-primary-fixed-variant": "#8a4518",
+                        "on-primary-container": "#fbe8d8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Eb Garamond"],
+                        "display": ["Eb Garamond"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #faf5ee; }
+        .font-headline { font-family: 'Eb Garamond', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Custom range styling for Sahara theme */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { background: #d8d0c8; height: 4px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #c2652a; cursor: pointer; margin-top: -7px; border: 2px solid #faf5ee; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
+        .card-sahara { background: #ffffff; border: 1px solid rgba(216, 208, 200, 0.4); box-shadow: 0 2px 16px rgba(58, 48, 42, 0.04); transition: all 0.3s ease; }
+        .card-sahara:hover { border-color: #c2652a; }
+        .card-active { border: 2px solid #c2652a !important; background-color: #fbe8d8; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant/60 flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline text-2xl font-bold text-primary">Aether Research</h1>
+<p class="font-body text-sm text-on-surface-variant opacity-70">Sahara Edition</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Workspace -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">clinical_notes</span>
+<span class="font-body text-sm">Workspace</span>
+</a>
+<!-- API Configuration -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-body text-sm">API Configuration</span>
+</a>
+<!-- Model Selection (ACTIVE) -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary bg-surface-variant/20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">model_training</span>
+<span class="font-body text-sm">Model Selection</span>
+</a>
+<!-- Knowledge Base -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body text-sm">Knowledge Base</span>
+</a>
+<!-- Long-term Memory -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-body text-sm">Long-term Memory</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm shadow-sm hover:opacity-90 transition-opacity">
+                New Analysis
+            </button>
+</div>
+</aside>
+<!-- TopAppBar (Execution from JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface/80 backdrop-blur-md shadow-sm flex justify-between items-center px-8 py-4">
+<div class="flex items-center flex-1">
+<div class="relative w-full max-w-md focus-within:ring-1 focus-within:ring-primary/20 rounded-full bg-surface-container-high px-4 py-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-body" placeholder="Search parameters..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant/40"></div>
+<span class="font-headline text-xl text-on-surface tracking-tight">Aether Research</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 pt-24 p-10 min-h-screen">
+<!-- Editorial Header -->
+<section class="mb-12 max-w-4xl">
+<h2 class="font-headline text-5xl font-medium text-on-background mb-4 leading-tight">Model Selection</h2>
+<p class="font-body text-lg text-on-surface-variant max-w-2xl">
+                Configure your reasoning engine to match your analytical requirements. Adjust performance weights between computational speed and cognitive depth.
+            </p>
+</section>
+<div class="bento-grid">
+<!-- Model Grid Section (Span 8) -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- GPT-4o -->
+<div class="card-sahara card-active p-6 rounded-xl flex flex-col cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<span class="px-2 py-1 bg-primary text-on-primary text-[10px] font-bold uppercase tracking-wider rounded">Recommended</span>
+</div>
+<h3 class="font-headline text-2xl mb-1">GPT-4o</h3>
+<p class="text-xs font-body text-on-surface-variant mb-4">Omni-modal reasoning with low latency.</p>
+<div class="mt-auto flex gap-2">
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Reasoning</span>
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Fast</span>
+</div>
+</div>
+<!-- Claude 3.5 Sonnet -->
+<div class="card-sahara p-6 rounded-xl flex flex-col cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-tertiary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">edit_note</span>
+</div>
+</div>
+<h3 class="font-headline text-2xl mb-1">Claude 3.5 Sonnet</h3>
+<p class="text-xs font-body text-on-surface-variant mb-4">Exceptional nuance and creative flow.</p>
+<div class="mt-auto flex gap-2">
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Editorial</span>
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Accurate</span>
+</div>
+</div>
+<!-- Llama 3.1 70B -->
+<div class="card-sahara p-6 rounded-xl flex flex-col cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-on-surface/5 p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-surface">hub</span>
+</div>
+</div>
+<h3 class="font-headline text-2xl mb-1">Llama 3.1 70B</h3>
+<p class="text-xs font-body text-on-surface-variant mb-4">State-of-the-art open source flexibility.</p>
+<div class="mt-auto flex gap-2">
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Open-source</span>
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Privacy</span>
+</div>
+</div>
+<!-- Gemini 1.5 Pro -->
+<div class="card-sahara p-6 rounded-xl flex flex-col cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-primary/5 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">data_array</span>
+</div>
+</div>
+<h3 class="font-headline text-2xl mb-1">Gemini 1.5 Pro</h3>
+<p class="text-xs font-body text-on-surface-variant mb-4">Massive context window for large sets.</p>
+<div class="mt-auto flex gap-2">
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Long Context</span>
+<span class="text-[10px] font-bold border border-outline-variant px-2 py-0.5 rounded text-on-surface-variant">Analysis</span>
+</div>
+</div>
+</div>
+<!-- Performance Metrics Visualization -->
+<div class="card-sahara p-8 rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-end mb-8 relative z-10">
+<div>
+<h4 class="font-headline text-2xl mb-1">Efficiency Canvas</h4>
+<p class="text-sm font-body text-on-surface-variant">Real-time benchmark projection</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold uppercase text-primary mb-1">Estimated latency</p>
+<p class="font-headline text-3xl">342ms <span class="text-sm font-body text-on-surface-variant">/ query</span></p>
+</div>
+</div>
+<!-- High Fidelity Visualization Wrapper -->
+<div class="h-64 w-full bg-surface-container-low rounded-lg flex items-end justify-between p-6 relative">
+<!-- Simulated Chart/Visualizer Area -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#c2652a 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
+<div class="flex flex-col h-full justify-between text-[10px] text-outline font-bold">
+<span>100%</span>
+<span>75%</span>
+<span>50%</span>
+<span>25%</span>
+<span>0%</span>
+</div>
+<div class="flex-1 flex items-end justify-around h-full pl-8 gap-4">
+<div class="flex flex-col items-center gap-2 group w-12">
+<div class="w-full bg-primary/20 rounded-t-sm h-[60%] group-hover:h-[65%] transition-all duration-500 relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-[80%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Logical</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-12">
+<div class="w-full bg-primary/20 rounded-t-sm h-[90%] group-hover:h-[95%] transition-all duration-500 relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-[90%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Precision</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-12">
+<div class="w-full bg-tertiary/20 rounded-t-sm h-[40%] group-hover:h-[45%] transition-all duration-500 relative">
+<div class="absolute inset-x-0 bottom-0 bg-tertiary h-[60%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Empathy</span>
+</div>
+<div class="flex flex-col items-center gap-2 group w-12">
+<div class="w-full bg-primary/20 rounded-t-sm h-[75%] group-hover:h-[80%] transition-all duration-500 relative">
+<div class="absolute inset-x-0 bottom-0 bg-primary h-[85%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">Density</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Configuration Panel (Span 4) -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="card-sahara p-8 rounded-xl sticky top-24">
+<h4 class="font-headline text-2xl mb-6">Engine Tuner</h4>
+<!-- Sliders -->
+<div class="space-y-8">
+<div>
+<div class="flex justify-between mb-3">
+<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wide">Temperature</label>
+<span class="text-sm font-bold text-primary" id="temp-val">0.7</span>
+</div>
+<input class="w-full" max="2" min="0" oninput="document.getElementById('temp-val').innerText = this.value" step="0.1" type="range" value="0.7"/>
+<div class="flex justify-between mt-2 text-[10px] text-outline font-medium">
+<span>Deterministic</span>
+<span>Creative</span>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-3">
+<label class="text-sm font-bold text-on-surface-variant uppercase tracking-wide">Top P</label>
+<span class="text-sm font-bold text-primary" id="top-p-val">0.9</span>
+</div>
+<input class="w-full" max="1" min="0" oninput="document.getElementById('top-p-val').innerText = this.value" step="0.05" type="range" value="0.9"/>
+</div>
+<div class="h-px bg-outline-variant/40 my-6"></div>
+<!-- Inputs -->
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-bold text-on-surface-variant uppercase tracking-wide mb-2">Max Tokens</label>
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none font-body text-sm" type="number" value="4096"/>
+</div>
+<div>
+<label class="block text-sm font-bold text-on-surface-variant uppercase tracking-wide mb-2">System Prompt</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none font-body text-sm resize-none" placeholder="Define the engine's personality and constraints..." rows="4"></textarea>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-bold text-sm shadow-md hover:translate-y-[-1px] transition-all active:scale-[0.98]">
+                            Deploy Configuration
+                        </button>
+<p class="text-[11px] text-center text-on-surface-variant/60 font-medium px-4">
+                            Changing these values will reset current active sessions associated with this model.
+                        </p>
+</div>
+</div>
+<!-- Auxiliary Info Card -->
+<div class="p-6 rounded-xl bg-surface-container border border-outline-variant/40">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary text-xl">verified_user</span>
+<h5 class="font-headline text-lg">Identity Lock</h5>
+</div>
+<p class="text-xs text-on-surface-variant font-body leading-relaxed">
+                        Configurations are encrypted and bound to your Workspace ID. Changes are tracked in the history log for audit purposes.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Atmosphere: Subtle Radial Gradient -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 bg-[radial-gradient(circle_at_70%_20%,#fbe8d8_0%,transparent_40%)]"></div>
+<script>
+        // Micro-interactions for model selection
+        const modelCards = document.querySelectorAll('.card-sahara.cursor-pointer');
+        modelCards.forEach(card => {
+            card.addEventListener('click', () => {
+                modelCards.forEach(c => c.classList.remove('card-active'));
+                card.classList.add('card-active');
+                
+                // Trigger a ripple-like visual feedback or sound if needed
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

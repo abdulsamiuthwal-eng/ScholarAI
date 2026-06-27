@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Research | RAG Workspace</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#fce4e0",
+                        "tertiary": "#8c3c3c",
+                        "on-surface-variant": "#605850",
+                        "tertiary-fixed": "#fce0e0",
+                        "surface-container-high": "#ece6dc",
+                        "secondary": "#78706a",
+                        "tertiary-container": "#d47070",
+                        "surface-container-highest": "#e6e0d6",
+                        "on-background": "#3a302a",
+                        "on-tertiary-fixed": "#2e1515",
+                        "on-surface": "#3a302a",
+                        "inverse-surface": "#3a302a",
+                        "secondary-fixed-dim": "#cec6be",
+                        "error": "#c0392b",
+                        "primary-fixed-dim": "#f0a878",
+                        "surface-bright": "#faf5ee",
+                        "secondary-container": "#eae2da",
+                        "outline": "#9a9088",
+                        "secondary-fixed": "#eae2da",
+                        "on-tertiary-fixed-variant": "#6e3030",
+                        "surface-container": "#f2ece4",
+                        "surface": "#faf5ee",
+                        "surface-dim": "#dcd6cc",
+                        "surface-variant": "#ece6dc",
+                        "on-primary-fixed-variant": "#8a4518",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#f0a878",
+                        "on-tertiary-container": "#3a2020",
+                        "primary-container": "#e08850",
+                        "surface-container-low": "#f6f0e8",
+                        "outline-variant": "#d8d0c8",
+                        "on-secondary-fixed-variant": "#504840",
+                        "surface-tint": "#c2652a",
+                        "on-error-container": "#7a1a10",
+                        "inverse-on-surface": "#faf5ee",
+                        "primary": "#c2652a",
+                        "on-primary-container": "#fbe8d8",
+                        "on-secondary-container": "#605850",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#faf5ee",
+                        "on-primary-fixed": "#401a08",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#e8a0a0",
+                        "on-secondary-fixed": "#2a2420",
+                        "primary-fixed": "#fbe8d8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["EB Garamond", "serif"],
+                        "display": ["EB Garamond", "serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Manrope", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #faf5ee; color: #3a302a; }
+        .font-headline { font-family: 'EB Garamond', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .glass-warm { background: rgba(250, 245, 238, 0.7); backdrop-filter: blur(12px); }
+        .shadow-soft { box-shadow: 0 2px 16px rgba(58, 48, 42, 0.04); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #faf5ee; }
+        ::-webkit-scrollbar-thumb { background: #d8d0c8; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<!-- Authority Source: JSON SideNavBar -->
+<aside class="hidden md:flex flex-col h-full w-72 bg-surface-container-low border-r border-outline-variant/60 p-4 space-y-6 transition-all duration-200 ease-in-out">
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+</div>
+<div>
+<h2 class="font-headline text-xl text-primary font-bold">Workspace Alpha</h2>
+<p class="text-xs text-on-surface-variant font-body">Sahara-1 Model Active</p>
+</div>
+</div>
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-body text-sm font-semibold flex items-center justify-center gap-2 shadow-soft hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Research Session
+        </button>
+<nav class="flex-1 space-y-1">
+<!-- Active State Logic: API Configuration could be active if we just started, but we'll default to Research (implied) or Knowledge Base -->
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all text-sm font-body" href="#">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+                API Configuration
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all text-sm font-body" href="#">
+<span class="material-symbols-outlined" data-icon="neurology">neurology</span>
+                Model Selection
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2.5 bg-primary-container text-on-primary-container rounded-lg font-semibold transition-all text-sm font-body" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+                Knowledge Base
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all text-sm font-body" href="#">
+<span class="material-symbols-outlined" data-icon="memory">memory</span>
+                Long-term Memory
+            </a>
+</nav>
+<div class="pt-4 border-t border-outline-variant/60 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all text-xs font-body uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="description">description</span>
+                Documentation
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all text-xs font-body uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 flex flex-col h-full bg-background relative overflow-hidden">
+<!-- Top Bar -->
+<!-- Authority Source: JSON TopAppBar -->
+<header class="flex justify-between items-center px-6 py-3 w-full border-b border-outline-variant/60 bg-background sticky top-0 z-30">
+<div class="flex items-center gap-8">
+<h1 class="font-headline text-2xl font-bold text-primary tracking-tight">Research Workspace</h1>
+<div class="hidden lg:flex items-center bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant/40 w-64">
+<span class="material-symbols-outlined text-secondary text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm font-body w-full placeholder:text-outline" placeholder="Search knowledge..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-1.5 border border-primary text-primary rounded-full text-sm font-semibold hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                    Export
+                </button>
+<div class="flex items-center gap-3 border-l border-outline-variant/60 pl-4">
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">cloud_done</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-primary transition-colors">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/60 cursor-pointer active:scale-95 transition-transform">
+<img class="w-full h-full object-cover" data-alt="A portrait of a professional research scientist in a warm-lit, modern architectural studio. The lighting is soft and golden, with a shallow depth of field. High-end lifestyle photography aesthetic with a focus on intellectual sophistication and warm minimalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbuv-zALUp-Qg4IdHGBIpVvDAWhV7zsZ2XHJtpmQdpK1vpXFDDExMdAraQCer4_Rf9AFZ48kanXIHpsBkEgS-FEIacb0TaWjOK_XN5dBwNlZtW3_lvk-LdTHERSmwMa9U4cNUIcFyNNMZRP80gnJG7FlnIgGD-w6HGVmBFPZP7rL7RxsYpNIU8Kxwjy_romdFK_bppoFNhmiTYeRky2Wf0RwOZdbemFSQJOTrVsoK5pYVrA-QtbGdraR_FEM-zKW_mFNC3VBbKKzg"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto px-6 py-8 flex flex-col items-center">
+<!-- Main Header -->
+<section class="w-full max-w-4xl mb-12 text-center">
+<h2 class="font-headline text-5xl md:text-6xl text-on-surface mb-3 tracking-tight">RAG Research Assistant</h2>
+<div class="flex flex-wrap justify-center gap-3 text-sm text-on-surface-variant font-body">
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-outline-variant/30">LangChain Framework</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-outline-variant/30">Groq Llama 3.1 70B</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-outline-variant/30">ChromaDB Vector Store</span>
+</div>
+</section>
+<!-- Status Cards -->
+<section class="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/40 shadow-soft">
+<p class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold mb-1">Status</p>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<p class="font-headline text-2xl text-on-surface">Ready</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/40 shadow-soft">
+<p class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold mb-1">Indexed Chunks</p>
+<p class="font-headline text-2xl text-on-surface">1,248</p>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/40 shadow-soft">
+<p class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold mb-1">Conversation</p>
+<p class="font-headline text-2xl text-on-surface">6 Turns</p>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl border border-outline-variant/40 shadow-soft">
+<p class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold mb-1">Active Model</p>
+<p class="font-headline text-2xl text-on-surface">Llama 3.1</p>
+</div>
+</section>
+<!-- Chat Interface -->
+<section class="w-full max-w-3xl flex-1 flex flex-col">
+<div class="space-y-8 mb-32">
+<!-- AI Message -->
+<div class="flex gap-4 items-start group">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]">auto_awesome</span>
+</div>
+<div class="bg-surface-container p-6 rounded-2xl rounded-tl-none border border-outline-variant/30 shadow-soft transition-all group-hover:border-primary/20">
+<p class="text-on-surface leading-relaxed text-sm">
+                                Hello. I've finished indexing the provided documentation on quantum annealing. How can I assist your research today? We can explore specific algorithms or look into recent experimental benchmarks.
+                            </p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 items-start justify-end">
+<div class="bg-primary text-on-primary p-4 rounded-2xl rounded-tr-none shadow-soft max-w-[80%]">
+<p class="text-sm">Can you summarize the performance of Llama 3.1 compared to previous iterations in complex RAG pipelines?</p>
+</div>
+</div>
+<!-- AI Message with Analysis -->
+<div class="flex gap-4 items-start group">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]">auto_awesome</span>
+</div>
+<div class="bg-surface-container p-6 rounded-2xl rounded-tl-none border border-outline-variant/30 shadow-soft transition-all group-hover:border-primary/20 flex-1">
+<p class="text-on-surface leading-relaxed text-sm mb-4">
+                                Llama 3.1 exhibits significant improvements in retrieval-augmented generation (RAG) tasks, particularly in context window utilization and reasoning accuracy. Here's a comparative analysis:
+                            </p>
+<div class="grid grid-cols-1 gap-3">
+<div class="bg-background/50 p-4 rounded-lg border border-outline-variant/20">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[16px]">data_check</span>
+<h4 class="text-xs font-bold uppercase tracking-wider text-secondary">Retrieval Precision</h4>
+</div>
+<p class="text-xs text-on-surface-variant">22% reduction in hallucinations compared to Llama 3.0 when working with long-form medical datasets.</p>
+</div>
+<div class="bg-background/50 p-4 rounded-lg border border-outline-variant/20">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[16px]">psychology</span>
+<h4 class="text-xs font-bold uppercase tracking-wider text-secondary">Reasoning Depth</h4>
+</div>
+<p class="text-xs text-on-surface-variant">Enhanced chain-of-thought capabilities allow for better synthesis of conflicting information found in separate retrieved chunks.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Chat Input -->
+<div class="absolute bottom-0 left-0 right-0 p-6 pointer-events-none">
+<div class="max-w-3xl mx-auto w-full pointer-events-auto">
+<div class="glass-warm border border-outline-variant/60 rounded-2xl shadow-xl p-2 flex items-end gap-2">
+<button class="p-3 text-secondary hover:text-primary transition-colors rounded-xl">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-3 px-1 resize-none font-body placeholder:text-outline" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" placeholder="Describe your research query..." rows="1"></textarea>
+<div class="flex items-center gap-2 p-1">
+<button class="p-3 text-secondary hover:text-primary transition-colors rounded-xl">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="bg-primary text-white p-3 rounded-xl shadow-soft hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+<p class="text-[10px] text-center mt-3 text-outline uppercase tracking-widest font-body">Powered by Aether Research Engines • Confidential Session</p>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Simple textarea auto-resize
+        const tx = document.getElementsByTagName('textarea');
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;overflow-y:hidden;');
+            tx[i].addEventListener("input", OnInput, false);
+        }
+
+        function OnInput() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        }
+
+        // Active tab switching simulation
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                navLinks.forEach(l => {
+                    l.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+                    l.classList.add('text-on-surface-variant');
+                });
+                link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+                link.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

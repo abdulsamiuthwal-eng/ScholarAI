@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>API Configuration | Aether Research</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Eb+Garamond:wght@400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#c2652a",
+                    "surface-variant": "#ece6dc",
+                    "error-container": "#fce4e0",
+                    "primary-container": "#e08850",
+                    "surface": "#faf5ee",
+                    "outline-variant": "#d8d0c8",
+                    "outline": "#9a9088",
+                    "tertiary-fixed": "#fce0e0",
+                    "on-tertiary-container": "#3a2020",
+                    "surface-container-highest": "#e6e0d6",
+                    "inverse-primary": "#f0a878",
+                    "surface-container-high": "#ece6dc",
+                    "secondary-fixed": "#eae2da",
+                    "surface-tint": "#c2652a",
+                    "secondary-fixed-dim": "#cec6be",
+                    "primary-fixed-dim": "#f0a878",
+                    "surface-bright": "#faf5ee",
+                    "primary-fixed": "#fbe8d8",
+                    "error": "#c0392b",
+                    "on-error-container": "#7a1a10",
+                    "surface-dim": "#dcd6cc",
+                    "tertiary-fixed-dim": "#e8a0a0",
+                    "on-secondary-container": "#605850",
+                    "inverse-on-surface": "#faf5ee",
+                    "surface-container": "#f2ece4",
+                    "on-primary": "#ffffff",
+                    "on-background": "#3a302a",
+                    "on-secondary-fixed-variant": "#504840",
+                    "on-surface": "#3a302a",
+                    "on-primary-fixed": "#401a08",
+                    "on-surface-variant": "#605850",
+                    "background": "#faf5ee",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-container": "#eae2da",
+                    "on-secondary-fixed": "#2a2420",
+                    "tertiary": "#8c3c3c",
+                    "secondary": "#78706a",
+                    "on-tertiary-fixed-variant": "#6e3030",
+                    "inverse-surface": "#3a302a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f6f0e8",
+                    "on-tertiary-fixed": "#2e1515",
+                    "tertiary-container": "#d47070",
+                    "on-primary-fixed-variant": "#8a4518",
+                    "on-primary-container": "#fbe8d8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Eb Garamond"],
+                    "display": ["Eb Garamond"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .font-headline { font-family: 'Eb Garamond', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bg-mesh {
+            background-color: #faf5ee;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(194, 101, 42, 0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(140, 60, 60, 0.02) 0px, transparent 50%);
+        }
+        input:focus {
+            box-shadow: 0 0 0 2px rgba(194, 101, 42, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 bg-mesh min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant/60 z-50 flex flex-col py-6">
+<div class="px-6 mb-10">
+<h1 class="font-headline text-2xl font-bold text-primary tracking-tight">Aether Research</h1>
+<p class="font-body text-xs text-on-surface-variant/70 tracking-widest uppercase mt-1">Sahara Edition</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Workspace -->
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">clinical_notes</span>
+<span class="font-body text-sm">Workspace</span>
+</a>
+<!-- API Configuration (ACTIVE) -->
+<a class="flex items-center gap-3 px-6 py-3 text-primary font-bold border-r-2 border-primary bg-surface-variant/20" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">settings_input_component</span>
+<span class="font-body text-sm">API Configuration</span>
+</a>
+<!-- Model Selection -->
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">model_training</span>
+<span class="font-body text-sm">Model Selection</span>
+</a>
+<!-- Knowledge Base -->
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">database</span>
+<span class="font-body text-sm">Knowledge Base</span>
+</a>
+<!-- Long-term Memory -->
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant font-medium hover:bg-surface-variant/30 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-body text-sm">Long-term Memory</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm shadow-sm hover:shadow-md transition-all active:scale-[0.98]">
+                New Analysis
+            </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-surface/80 backdrop-blur-md shadow-sm flex justify-between items-center px-8 py-4">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md focus-within:ring-1 focus-within:ring-primary/20 rounded-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-0 placeholder:text-on-surface-variant/50" placeholder="Search parameters..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="pt-24 pb-16 px-12 max-w-6xl mx-auto">
+<!-- Page Header -->
+<section class="mb-12">
+<h2 class="font-headline text-5xl font-medium text-on-surface mb-2 tracking-tight">API Configuration</h2>
+<p class="font-body text-on-surface-variant text-lg opacity-80">Secure your research foundation.</p>
+</section>
+<!-- Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Main Form Section -->
+<div class="md:col-span-8 space-y-6">
+<!-- OpenAI Card -->
+<div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/40 transition-all hover:shadow-lg hover:shadow-primary/5 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center border border-outline-variant/30 shadow-sm">
+<span class="material-symbols-outlined text-primary text-2xl">bolt</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl text-on-surface">OpenAI</h3>
+<p class="text-xs font-label text-on-surface-variant/60 uppercase tracking-widest">GPT-4o &amp; Text Embedding</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold border border-green-100">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                Connected
+                            </div>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">Secret Key</label>
+<div class="relative">
+<input class="w-full bg-white border-outline-variant focus:border-primary focus:ring-0 rounded-lg py-3 px-4 text-sm font-mono tracking-widest text-on-surface" type="password" value="sk-proj-••••••••••••••••••••••••"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Anthropic Card -->
+<div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/40 transition-all hover:shadow-lg hover:shadow-primary/5 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center border border-outline-variant/30 shadow-sm">
+<span class="material-symbols-outlined text-primary text-2xl">psychology</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl text-on-surface">Anthropic</h3>
+<p class="text-xs font-label text-on-surface-variant/60 uppercase tracking-widest">Claude 3.5 Sonnet</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-xs font-bold border border-tertiary/10">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+                                Invalid Key
+                            </div>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">API Key</label>
+<input class="w-full bg-white border-outline-variant focus:border-primary focus:ring-0 rounded-lg py-3 px-4 text-sm font-mono placeholder:text-on-surface-variant/30" placeholder="sk-ant-..." type="password"/>
+</div>
+</div>
+</div>
+<!-- Groq Card -->
+<div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/40 transition-all hover:shadow-lg hover:shadow-primary/5 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center border border-outline-variant/30 shadow-sm">
+<span class="material-symbols-outlined text-primary text-2xl">memory</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl text-on-surface">Groq</h3>
+<p class="text-xs font-label text-on-surface-variant/60 uppercase tracking-widest">Llama 3 (70B) Inference</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-bold border border-outline-variant">
+<span class="w-1.5 h-1.5 bg-outline rounded-full"></span>
+                                Not Configured
+                            </div>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">API Key</label>
+<input class="w-full bg-white border-outline-variant focus:border-primary focus:ring-0 rounded-lg py-3 px-4 text-sm font-mono placeholder:text-on-surface-variant/30" placeholder="gsk_..." type="password"/>
+</div>
+</div>
+</div>
+<!-- Pinecone Card -->
+<div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/40 transition-all hover:shadow-lg hover:shadow-primary/5 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center border border-outline-variant/30 shadow-sm">
+<span class="material-symbols-outlined text-primary text-2xl">forest</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl text-on-surface">Pinecone</h3>
+<p class="text-xs font-label text-on-surface-variant/60 uppercase tracking-widest">Vector Database</p>
+</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold border border-green-100">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                Connected
+                            </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="relative">
+<label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">Environment</label>
+<input class="w-full bg-white border-outline-variant focus:border-primary focus:ring-0 rounded-lg py-3 px-4 text-sm font-mono text-on-surface" type="text" value="us-east-1-gcp"/>
+</div>
+<div class="relative">
+<label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">API Key</label>
+<input class="w-full bg-white border-outline-variant focus:border-primary focus:ring-0 rounded-lg py-3 px-4 text-sm font-mono text-on-surface" type="password" value="••••••••••••••••••••••••"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Action Sidebar -->
+<div class="md:col-span-4 space-y-6">
+<!-- Security Posture -->
+<div class="bg-surface-container-high rounded-xl p-6 border border-primary/10 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
+<h4 class="font-headline text-xl text-on-surface mb-4">Security Insights</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center pb-3 border-b border-outline-variant/30">
+<span class="text-sm font-medium text-on-surface-variant">Last Rotation</span>
+<span class="text-sm font-bold text-on-surface">14 days ago</span>
+</div>
+<div class="flex justify-between items-center pb-3 border-b border-outline-variant/30">
+<span class="text-sm font-medium text-on-surface-variant">Encryption</span>
+<span class="text-sm font-bold text-green-600">AES-256 GCM</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium text-on-surface-variant">Exposure Status</span>
+<span class="text-sm font-bold text-on-surface">Safe</span>
+</div>
+</div>
+</div>
+<!-- Global Actions -->
+<div class="flex flex-col gap-3">
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-2 group">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">save</span>
+                            Save Changes
+                        </button>
+<button class="w-full py-4 bg-white text-primary border border-primary/30 rounded-lg font-bold hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">sync</span>
+                            Test Connectivity
+                        </button>
+</div>
+<!-- Documentation Card -->
+<div class="bg-white rounded-xl p-8 border border-outline-variant/20 shadow-sm">
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">menu_book</span>
+</div>
+<h4 class="font-headline text-xl text-on-surface mb-2">Need assistance?</h4>
+<p class="text-sm text-on-surface-variant mb-6">Our integration guide provides step-by-step instructions for obtaining production keys.</p>
+<a class="text-primary font-bold text-sm underline underline-offset-4 hover:text-primary-container transition-colors" href="#">Read Documentation</a>
+</div>
+</div>
+<!-- Visual Accent -->
+<div class="h-48 rounded-xl relative overflow-hidden shadow-inner bg-surface-dim group">
+<img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-alt="A macro photograph of golden desert sand dunes at dusk, with soft ripples and dramatic long shadows. The lighting is warm and amber-toned, emphasizing the fine texture of the sand grains against a clear, deep indigo sky. The aesthetic is luxurious, tranquil, and minimalist, echoing the Sahara Edition brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2LvdlmwYAOG_9zdJiq7Gr2Ruy4xN_1IcUHAMKxG2HjPgD2FENwht72Tr-dW6JRYjTKvgw8m6tPvfDK5pGorXKav6JsjjYoFe5xul2i9dOwdj7ekaPy69dfSOKoU8PWV22qQJzkuW-b-OgwOm1UNciL3DTgBOFE4_jrKwNwt8d4x9OayCivQlpyR2MxgDqnSgnnEHze42sA_0U3xtHo3GloC6zxahx0NSbf5-jMFkgbJgxtNn-0ROnWJwZ6FhQ8a697oNnwWXYj60"/>
+<div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
+<div class="absolute bottom-4 left-4">
+<p class="font-headline text-white text-lg drop-shadow-sm italic">"The clarity of the source."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / System Status -->
+<footer class="px-12 py-8 border-t border-outline-variant/30 flex justify-between items-center text-on-surface-variant/60 text-xs uppercase tracking-widest font-label">
+<div>© 2024 Aether Research Corporation</div>
+<div class="flex gap-6">
+<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> System Operational</span>
+<span class="flex items-center gap-1.5">v2.4.0 Sahara-L</span>
+</div>
+</footer>
+</main>
+<!-- Simple Interactivity for the UI -->
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Toggle visibility simulation
+        document.querySelectorAll('button .material-symbols-outlined').forEach(icon => {
+            if (icon.innerText === 'visibility') {
+                icon.parentElement.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.querySelector('span').innerText = 'visibility_off';
+                    } else {
+                        input.type = 'password';
+                        this.querySelector('span').innerText = 'visibility';
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

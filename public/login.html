@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>ScholarAI | Sign In</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#c2652a", "surface-variant": "#ece6dc",
+          "primary-container": "#e08850", "surface": "#faf5ee",
+          "outline-variant": "#d8d0c8", "outline": "#9a9088",
+          "surface-container-high": "#e6e0d6", "surface-container": "#f2ece4",
+          "on-primary": "#ffffff", "on-surface": "#3a302a",
+          "on-surface-variant": "#605850", "secondary": "#78706a",
+          "on-secondary": "#ffffff", "background": "#faf5ee",
+          "tertiary": "#8c3c3c", "error": "#c0392b",
+        },
+        fontFamily: {
+          "headline": ["EB Garamond", "serif"],
+          "body": ["Manrope", "sans-serif"],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; overflow: hidden; height: 100vh; background: #faf5ee; }
+
+  /* ── Splash Screen ──────────────────────────────────── */
+  #splash {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #1a1412 0%, #2b1f18 40%, #3a2820 100%);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #splash.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
+  #splash.hidden { display: none; }
+
+  .splash-logo {
+    width: 100px; height: 100px; position: relative; margin-bottom: 2rem;
+  }
+  .splash-logo .ring {
+    position: absolute; inset: 0; border-radius: 50%;
+    border: 2px solid rgba(194, 101, 42, 0.3);
+    animation: splashPulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+  .splash-logo .ring:nth-child(2) {
+    inset: -12px; border-color: rgba(194, 101, 42, 0.15);
+    animation-delay: 0.3s;
+  }
+  .splash-logo .ring:nth-child(3) {
+    inset: -24px; border-color: rgba(194, 101, 42, 0.08);
+    animation-delay: 0.6s;
+  }
+  @keyframes splashPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.6; }
+  }
+  .splash-logo .icon {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .splash-logo .icon span {
+    font-size: 48px; color: #c2652a; animation: splashIcon 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes splashIcon {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1.1); opacity: 1; }
+  }
+
+  .splash-title { font-family: 'EB Garamond', serif; font-size: 3rem; color: #f2ece4; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+  .splash-title span { opacity: 0; display: inline-block; animation: charFade 0.4s ease forwards; }
+  @keyframes charFade { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+
+  .splash-subtitle { font-size: 0.625rem; letter-spacing: 0.4em; color: rgba(194, 101, 42, 0.6); text-transform: uppercase; font-weight: 700; margin-bottom: 3rem; opacity: 0; animation: fadeInUp 0.6s ease 0.8s forwards; }
+
+  .splash-loader { width: 200px; height: 2px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; opacity: 0; animation: fadeInUp 0.6s ease 1.2s forwards; }
+  .splash-loader .bar { height: 100%; width: 0%; background: linear-gradient(90deg, #c2652a, #e08850); border-radius: 4px; animation: loadBar 2s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards; }
+  @keyframes loadBar { 0% { width: 0%; } 100% { width: 100%; } }
+
+  @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+
+  /* ── Auth Page ──────────────────────────────────────── */
+  #auth-page {
+    position: fixed; inset: 0; display: flex;
+    opacity: 0; transition: opacity 0.8s ease 0.3s;
+  }
+  #auth-page.show { opacity: 1; }
+
+  .auth-bg {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    background: linear-gradient(135deg, #faf5ee 0%, #f2ece4 50%, #ece6dc 100%);
+  }
+  .auth-bg .orb {
+    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15;
+  }
+  .auth-bg .orb:nth-child(1) { width: 500px; height: 500px; background: #c2652a; top: -10%; right: -5%; animation: orbFloat 12s ease-in-out infinite; }
+  .auth-bg .orb:nth-child(2) { width: 400px; height: 400px; background: #e08850; bottom: -15%; left: -8%; animation: orbFloat 15s ease-in-out infinite reverse; }
+  .auth-bg .orb:nth-child(3) { width: 250px; height: 250px; background: #8c3c3c; top: 40%; right: 10%; animation: orbFloat 10s ease-in-out infinite 2s; }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  /* ── Auth Card ──────────────────────────────────────── */
+  .auth-container {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%; padding: 1.5rem;
+  }
+
+  .auth-card {
+    width: 100%; max-width: 440px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid rgba(216,208,200,0.5);
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem 2rem;
+    box-shadow: 0 24px 80px rgba(58,48,42,0.08), 0 8px 24px rgba(58,48,42,0.04);
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #auth-page.show .auth-card { opacity: 1; transform: translateY(0); }
+
+  .auth-brand {
+    text-align: center; margin-bottom: 2rem;
+  }
+  .auth-brand .icon-ring {
+    width: 56px; height: 56px; margin: 0 auto 1rem;
+    border-radius: 50%; border: 2px solid rgba(194,101,42,0.2);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .auth-brand .icon-ring::before {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid rgba(194,101,42,0.08);
+  }
+  .auth-brand .icon-ring span { color: #c2652a; font-size: 28px; }
+  .auth-brand h1 { font-family: 'EB Garamond', serif; font-size: 1.75rem; color: #3a302a; letter-spacing: -0.02em; }
+  .auth-brand p { font-size: 0.625rem; letter-spacing: 0.35em; color: #9a9088; text-transform: uppercase; font-weight: 700; margin-top: 0.15rem; }
+
+  .auth-tabs {
+    display: flex; background: rgba(236,230,220,0.5); border-radius: 0.75rem; padding: 3px; margin-bottom: 1.75rem;
+  }
+  .auth-tab {
+    flex: 1; padding: 0.625rem; text-align: center; font-size: 0.8125rem; font-weight: 700;
+    border-radius: 0.625rem; cursor: pointer; transition: all 0.3s ease;
+    color: #78706a; border: none; background: transparent;
+  }
+  .auth-tab.active { background: #fff; color: #3a302a; box-shadow: 0 2px 8px rgba(58,48,42,0.06); }
+
+  .auth-form { display: none; }
+  .auth-form.active { display: block; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block; font-size: 0.6875rem; font-weight: 700; color: #605850;
+    margin-bottom: 0.375rem; letter-spacing: 0.02em;
+  }
+  .form-group .input-wrap {
+    position: relative;
+  }
+  .form-group .input-wrap .material-symbols-outlined {
+    position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+    font-size: 1.1rem; color: #9a9088; transition: color 0.3s;
+  }
+  .form-group .input-wrap input {
+    width: 100%; padding: 0.8125rem 1rem 0.8125rem 2.75rem;
+    background: #fff; border: 1.5px solid rgba(216,208,200,0.6);
+    border-radius: 0.75rem; font-size: 0.875rem; font-family: 'Manrope', sans-serif;
+    color: #3a302a; outline: none; transition: all 0.3s ease;
+  }
+  .form-group .input-wrap input:focus {
+    border-color: #c2652a; box-shadow: 0 0 0 3px rgba(194,101,42,0.08);
+  }
+  .form-group .input-wrap input:focus ~ .material-symbols-outlined { color: #c2652a; }
+  .form-group .input-wrap input::placeholder { color: #bab0a8; }
+
+  .auth-btn {
+    width: 100%; padding: 0.9375rem; background: #c2652a; color: #fff;
+    border: none; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 800;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative; overflow: hidden;
+    letter-spacing: 0.02em;
+  }
+  .auth-btn:hover { background: #b05820; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(194,101,42,0.25); }
+  .auth-btn:active { transform: translateY(0); scale: 0.99; }
+  .auth-btn .ripple {
+    position: absolute; border-radius: 50%; background: rgba(255,255,255,0.3);
+    transform: scale(0); animation: ripple 0.6s ease-out;
+  }
+  @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+  .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .auth-error {
+    background: rgba(192,57,43,0.06); border: 1px solid rgba(192,57,43,0.15);
+    color: #c0392b; font-size: 0.75rem; font-weight: 600; padding: 0.625rem 1rem;
+    border-radius: 0.625rem; margin-bottom: 1rem; display: none;
+  }
+  .auth-error.show { display: block; }
+
+  .auth-divider {
+    text-align: center; font-size: 0.6875rem; color: #9a9088;
+    margin: 1.25rem 0; position: relative;
+  }
+  .auth-divider::before, .auth-divider::after {
+    content: ''; position: absolute; top: 50%; width: 40%; height: 1px;
+    background: rgba(216,208,200,0.5);
+  }
+  .auth-divider::before { left: 0; }
+  .auth-divider::after { right: 0; }
+
+  .demo-btn {
+    width: 100%; padding: 0.8125rem; background: transparent;
+    border: 1.5px solid rgba(194,101,42,0.2); color: #c2652a;
+    border-radius: 0.75rem; font-size: 0.8125rem; font-weight: 700;
+    cursor: pointer; transition: all 0.3s ease;
+  }
+  .demo-btn:hover { background: rgba(194,101,42,0.04); border-color: rgba(194,101,42,0.4); }
+
+  .auth-footer {
+    text-align: center; font-size: 0.6875rem; color: #9a9088; margin-top: 1.5rem;
+  }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 480px) {
+    .auth-card { padding: 2rem 1.25rem 1.5rem; border-radius: 1rem; }
+    .auth-brand h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SPLASH SCREEN ═══════════ -->
+<div id="splash">
+  <div class="splash-logo">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="icon"><span class="material-symbols-outlined">auto_awesome</span></div>
+  </div>
+  <h1 class="splash-title" id="splash-title"></h1>
+  <p class="splash-subtitle">Research Intelligence</p>
+  <div class="splash-loader"><div class="bar"></div></div>
+</div>
+<script>
+// ── Splash fallback: force dismiss after 6s if stuck ──
+setTimeout(function(){
+  var s = document.getElementById('splash');
+  if(s && !s.classList.contains('hidden')) {
+    s.classList.add('hide');
+    document.getElementById('auth-page').classList.add('show');
+    setTimeout(function(){ if(s) s.classList.add('hidden'); }, 600);
+  }
+}, 6000);
+</script>
+
+<!-- ═══════════ AUTH PAGE ═══════════ -->
+<div id="auth-page">
+  <div class="auth-bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="icon-ring"><span class="material-symbols-outlined">auto_awesome</span></div>
+        <h1>ScholarAI</h1>
+        <p>Research Intelligence</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" data-tab="register" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <div id="auth-error" class="auth-error"></div>
+
+      <!-- Login Form -->
+      <form class="auth-form active" id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined">mail</span>
+            <input type="email" id="login-email" placeholder="you@research.org" required autocomplete="email"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined">lock</span>
+            <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" minlength="6"/>
+          </div>
+        </div>
+        <button type="submit" class="auth-btn" id="login-btn">Sign In</button>
+        <div class="auth-divider">or</div>
+        <button type="button" class="demo-btn" onclick="demoLogin()">Continue as Demo User</button>
+      </form>
+
+      <!-- Register Form -->
+      <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined">person</span>
+            <input type="text" id="reg-name" placeholder="Your name" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined">mail</span>
+            <input type="email" id="reg-email" placeholder="you@research.org" required autocomplete="email"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined">lock</span>
+            <input type="password" id="reg-password" placeholder="At least 6 characters" required autocomplete="new-password" minlength="6"/>
+          </div>
+        </div>
+        <button type="submit" class="auth-btn" id="register-btn">Create Account</button>
+        <div class="auth-divider">or</div>
+        <button type="button" class="demo-btn" onclick="demoLogin()">Continue as Demo User</button>
+      </form>
+
+      <p class="auth-footer">Secure • Local Storage • JWT Authenticated</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = window.location.origin;
+
+// ── Splash Screen ──────────────────────────────────
+const title = "ScholarAI";
+const titleEl = document.getElementById('splash-title');
+
+title.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.textContent = char === ' ' ? '\u00A0' : char;
+  span.style.animationDelay = `${0.3 + i * 0.04}s`;
+  titleEl.appendChild(span);
+});
+
+function dismissSplash() {
+  var s = document.getElementById('splash');
+  if (!s) return;
+  s.classList.add('hide');
+  document.getElementById('auth-page').classList.add('show');
+  setTimeout(function(){ s.classList.add('hidden'); }, 800);
+}
+
+setTimeout(dismissSplash, 2800);
+var splashEl = document.getElementById('splash');
+if (splashEl) splashEl.addEventListener('click', dismissSplash);
+
+// ── Tab Switching ───────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  document.getElementById(tab === 'login' ? 'login-form' : 'register-form').classList.add('active');
+  document.getElementById('auth-error').classList.remove('show');
+}
+
+// ── Login ───────────────────────────────────────────
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  showError('');
+
+  try {
+    const r = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const d = await r.json();
+    if (!r.ok) { showError(d.detail || 'Login failed'); btn.disabled = false; btn.textContent = 'Sign In'; return; }
+    localStorage.setItem('aether_token', d.token);
+    localStorage.setItem('aether_user', JSON.stringify(d.user));
+    window.location.href = '/';
+  } catch (e) {
+    showError('Cannot reach server. Make sure it is running.');
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+}
+
+// ── Register ────────────────────────────────────────
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('register-btn');
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  showError('');
+
+  try {
+    const r = await fetch(`${API}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name })
+    });
+    const d = await r.json();
+    if (!r.ok) { showError(d.detail || 'Registration failed'); btn.disabled = false; btn.textContent = 'Create Account'; return; }
+    localStorage.setItem('aether_token', d.token);
+    localStorage.setItem('aether_user', JSON.stringify(d.user));
+    window.location.href = '/';
+  } catch (e) {
+    showError('Cannot reach server. Make sure it is running.');
+    btn.disabled = false; btn.textContent = 'Create Account';
+  }
+}
+
+// ── Demo Login ──────────────────────────────────────
+async function demoLogin() {
+  showError('');
+  try {
+    const r = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'demo@scholarai.local', password: 'demo123456' })
+    });
+    let d = await r.json();
+    if (!r.ok) {
+      // Auto-register demo user
+      const r2 = await fetch(`${API}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'demo@scholarai.local', password: 'demo123456', name: 'Researcher' })
+      });
+      d = await r2.json();
+      if (!r2.ok) { showError(d.detail || 'Demo login unavailable'); return; }
+    }
+    localStorage.setItem('aether_token', d.token);
+    localStorage.setItem('aether_user', JSON.stringify(d.user));
+    window.location.href = '/';
+  } catch (e) {
+    showError('Cannot reach server.');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.classList.toggle('show', !!msg);
+}
+
+// ── Ripple Effect ───────────────────────────────────
+document.querySelectorAll('.auth-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const rect = this.getBoundingClientRect();
+    const r = document.createElement('span');
+    r.className = 'ripple';
+    r.style.left = (e.clientX - rect.left) + 'px';
+    r.style.top = (e.clientY - rect.top) + 'px';
+    r.style.width = r.style.height = '20px';
+    this.appendChild(r);
+    setTimeout(() => r.remove(), 600);
+  });
+});
+</script>
+</body>
+</html>
