@@ -346,6 +346,22 @@ setTimeout(function(){
 <script>
 const API = window.location.origin;
 
+// ── Wake up server on page load ────────────────────
+fetch(`${API}/api/status`).catch(() => {});
+
+// ── Retry helper (HF Spaces sleep fix) ─────────────
+async function apiFetch(url, opts, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const r = await fetch(url, opts);
+      return r;
+    } catch (e) {
+      if (i === retries - 1) throw e;
+      await new Promise(r => setTimeout(r, 2000 * (i + 1)));
+    }
+  }
+}
+
 // ── Splash Screen ──────────────────────────────────
 const title = "ScholarAI";
 const titleEl = document.getElementById('splash-title');
@@ -388,7 +404,7 @@ async function handleLogin(e) {
   showError('');
 
   try {
-    const r = await fetch(`${API}/api/auth/login`, {
+    const r = await apiFetch(`${API}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -399,7 +415,7 @@ async function handleLogin(e) {
     localStorage.setItem('aether_user', JSON.stringify(d.user));
     window.location.href = '/';
   } catch (e) {
-    showError('Cannot reach server. Make sure it is running.');
+    showError('Cannot reach server. Still having trouble? Try again in a moment.');
     btn.disabled = false; btn.textContent = 'Sign In';
   }
 }
@@ -416,7 +432,7 @@ async function handleRegister(e) {
   showError('');
 
   try {
-    const r = await fetch(`${API}/api/auth/register`, {
+    const r = await apiFetch(`${API}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, name })
@@ -427,7 +443,7 @@ async function handleRegister(e) {
     localStorage.setItem('aether_user', JSON.stringify(d.user));
     window.location.href = '/';
   } catch (e) {
-    showError('Cannot reach server. Make sure it is running.');
+    showError('Cannot reach server. Still having trouble? Try again in a moment.');
     btn.disabled = false; btn.textContent = 'Create Account';
   }
 }
@@ -436,7 +452,7 @@ async function handleRegister(e) {
 async function demoLogin() {
   showError('');
   try {
-    const r = await fetch(`${API}/api/auth/login`, {
+    const r = await apiFetch(`${API}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'demo@scholarai.local', password: 'demo123456' })
@@ -444,7 +460,7 @@ async function demoLogin() {
     let d = await r.json();
     if (!r.ok) {
       // Auto-register demo user
-      const r2 = await fetch(`${API}/api/auth/register`, {
+      const r2 = await apiFetch(`${API}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: 'demo@scholarai.local', password: 'demo123456', name: 'Researcher' })
@@ -456,7 +472,7 @@ async function demoLogin() {
     localStorage.setItem('aether_user', JSON.stringify(d.user));
     window.location.href = '/';
   } catch (e) {
-    showError('Cannot reach server.');
+    showError('Cannot reach server. Still having trouble? Try again in a moment.');
   }
 }
 

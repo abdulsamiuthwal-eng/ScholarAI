@@ -854,6 +854,23 @@ setTimeout(function(){
 ═══════════════════════════════════════════════════ -->
 <script>
 const API = window.location.origin;
+
+// ── Wake up server ────────────────────────────────
+fetch(`${API}/api/status`).catch(() => {});
+
+// ── Retry helper (HF Spaces sleep fix) ─────────────
+async function apiFetch(url, opts, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const r = await fetch(url, opts);
+      return r;
+    } catch (e) {
+      if (i === retries - 1) throw e;
+      await new Promise(r => setTimeout(r, 2000 * (i + 1)));
+    }
+  }
+}
+
 let currentPage = 'workspace';
 let sessionId = 'session-' + Date.now();
 let turns = 0;
@@ -940,7 +957,7 @@ async function sendMessage() {
   const typingId = appendTyping();
 
   try {
-    const r = await authFetch(`${API}/api/chat`, {
+    const r = await apiFetch(`${API}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ session_id: sessionId, message: msg, model: currentModel })
@@ -1471,13 +1488,17 @@ function initSplash() {
 
   // Verify token is valid before proceeding
   try {
-    var r = await fetch(API + '/api/auth/me', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    var r = await apiFetch(API + '/api/auth/me', { headers: { 'Authorization': 'Bearer ' + getToken() } });
     if (r.status === 401) {
       localStorage.removeItem('aether_token');
       window.location.href = '/login';
       return;
     }
-  } catch(e) {}
+  } catch(e) {
+    localStorage.removeItem('aether_token');
+    window.location.href = '/login';
+    return;
+  }
 
   // Token valid — dismiss splash and load app
   dismissSplash();
