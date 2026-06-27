@@ -33,6 +33,9 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
+# ── CORS config (before app setup) ────────────────────────────────────────────
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
+
 # ── App setup ─────────────────────────────────────────────────────────────────
 app = FastAPI(title="ScholarAI API", version="1.0.0")
 
@@ -69,8 +72,6 @@ if not SECRET_KEY:
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
-
-CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
